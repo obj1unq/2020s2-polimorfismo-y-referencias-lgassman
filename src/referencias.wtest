@@ -1,0 +1,31 @@
+import referencias.*
+test "test1" {
+
+	principiante.suenaLindo()
+	virtuoso.tocar()
+	principiante.suenaLindo()
+
+	assert.that(true)
+}
+
+test "test2" {
+	principiante.instrumento(virtuoso)
+	principiante.tocar()
+	assert.that(true)
+}
+
+test "test3" {
+	virtuoso.instrumento(equipoChico)
+	virtuoso.tocar()
+	virtuoso.suenaLindo()
+	virtuoso.instrumentoViejo()
+	assert.that(true)
+}
+
+test "test4" {
+	guitarraElectrica.equipo(guitarraElectrica)
+	virtuoso.tocar()
+	virtuoso.suenaLindo()
+	virtuoso.instrumentoViejo()
+	assert.that(true)
+}
