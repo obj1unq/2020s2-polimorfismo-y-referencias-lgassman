@@ -42,18 +42,18 @@ object paquete {
 	// disponibles en los servicios
 	method reservar() {
 		
-		if(servicio.esVehiculoParaTralado()){
+		if(servicioOfrecido.esVehiculoParaTralado()){
 			servicioOfrecido.asientosDisponibles(servicioOfrecido.asientosDisponibles() - cantidadPersonas)
 		}
 		
-		if(servicio.esHotel()) {
+		if(servicioOfrecido.esHotel()) {
 			servicioOfrecido.camasDisponibles(servicioOfrecido.camasDisponibles() - cantidadPersonas)
 			if (premium) {
 				servicioOfrecido.reservarSpa()
 			}
 		}
 				
-		if(servicio.esCombinado()) {
+		if(servicioOfrecido.esCombinado()) {
 			servicioOfrecido.asientosDisponibles(servicioOfrecido.asientosDisponibles() - cantidadPersonas)
 			servicioOfrecido.camasDisponibles(servicioOfrecido.camasDisponibles() - cantidadPersonas)
 			if (premium) {
