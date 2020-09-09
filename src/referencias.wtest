@@ -17,7 +17,6 @@ test "test2" {
 test "test3" {
 	virtuoso.instrumento(equipoChico)
 	virtuoso.tocar()
-	virtuoso.suenaLindo()
 	virtuoso.instrumentoViejo()
 	assert.that(true)
 }
@@ -25,7 +24,6 @@ test "test3" {
 test "test4" {
 	guitarraElectrica.equipo(guitarraElectrica)
 	virtuoso.tocar()
-	virtuoso.suenaLindo()
 	virtuoso.instrumentoViejo()
 	assert.that(true)
 }

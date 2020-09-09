@@ -30,7 +30,7 @@ object virtuoso {
 	}
 	
 	method instrumentoViejo(){
-		return instrumento.usos() >= 10
+		return instrumento.usos() >= 20
 	}
 	
 }
@@ -58,7 +58,7 @@ object guitarraElectrica {
 	
 	method usar() {
 		usos++
-		if(usos > 20) {
+		if(usos < 20) {
 			equipo.usar()
 		}
 	}
@@ -74,11 +74,15 @@ object equipoChico {
 	var usosRestantes = 6
 	
 	method usar() {
-		usosRestantes = (usosRestantes - 1).max(9)
+		usosRestantes = (usosRestantes - 1).max(0)
 	}
 	
 	method gastado() {
 		return usosRestantes == 0
+	}
+	
+	method usos() {
+		return 6 - usosRestantes;
 	}
 }
 
