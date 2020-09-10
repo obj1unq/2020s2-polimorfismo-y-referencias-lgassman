@@ -1,7 +1,7 @@
 object paquete {
 
 	var property cantidadPersonas = 1 // un numero
-	var property servicioOfrecido = servicio // hotel, traslado, combinado
+	var property servicioOfrecido = servicioCombinado // hotel, traslado, combinado
 	var property premium = false // un booleano 
 	var reservado = false
 
@@ -11,134 +11,76 @@ object paquete {
 
 	// Se puede reservar si no esta reservado y el servicio se puede reservar
 	method sePuedeReservar() {
-		if (self.estaReservado()) {
-			return false
-		}
-		if (servicioOfrecido.esHotel()) { // Un hotel se puede reservar si hay lugares disponibles. 
-		// Ademas, si el paquete es premium el hotel tiene que ser
-		// como minimo de 4 estrellas
-			return servicioOfrecido.camasDisponibles() >= cantidadPersonas and 
-					(not premium or (servicioOfrecido.estrellas() >= 4 and servicioOfrecido.spaDisponible())) 
-		}
-		
-		if (servicioOfrecido.esVehiculoParaTralado()) {
-			// Un traslado se puede reservar si el vehiculo cuenta con 
-			// lugares disponibles y tiene la verificacion tecnica al dia.
-			// Si el paquete es premium, tambien tiene que cumplir que  
-			// tenga aire Acondicionado
-			return servicioOfrecido.asientosDisponibles() >= cantidadPersonas and servicioOfrecido.tieneVTV() and (not premium or servicioOfrecido.tieneAireAcondicionado())
-		}
-		if (servicioOfrecido.esCombinado()) {
-			// Si es combinado tiene que cumplir el requierimiento del hotel y del vehiculo
-			return servicioOfrecido.camasDisponibles() >= cantidadPersonas and 
-					(not premium or (servicioOfrecido.estrellas() >= 4 and servicioOfrecido.spaDisponible())) and 
-						servicioOfrecido.asientosDisponibles() >= cantidadPersonas and servicioOfrecido.tieneVTV() 
-						and (not premium or servicioOfrecido.tieneAireAcondicionado())
-		}
-		return false // ??		
+		return not self.estaReservado() and servicioOfrecido.sePuedeReservar(self)
 	}
 
 	// Cuando se reserva se cambia el estado y se modifican los lugares 
 	// disponibles en los servicios
 	method reservar() {
-		
-		if(servicioOfrecido.esVehiculoParaTralado()){
-			servicioOfrecido.asientosDisponibles(servicioOfrecido.asientosDisponibles() - cantidadPersonas)
-		}
-		
-		if(servicioOfrecido.esHotel()) {
-			servicioOfrecido.camasDisponibles(servicioOfrecido.camasDisponibles() - cantidadPersonas)
-			if (premium) {
-				servicioOfrecido.reservarSpa()
-			}
-		}
-				
-		if(servicioOfrecido.esCombinado()) {
-			servicioOfrecido.asientosDisponibles(servicioOfrecido.asientosDisponibles() - cantidadPersonas)
-			servicioOfrecido.camasDisponibles(servicioOfrecido.camasDisponibles() - cantidadPersonas)
-			if (premium) {
-				servicioOfrecido.reservarSpa()
-			}
-			
-		}
+		servicioOfrecido.reservar(self)
 		reservado = true
 	}
 
 }
 
-object servicio {
-
-	var property asientosDisponibles = 10 // lugares disponibles del VEHICULO
+object hotel {
+	
 	var property camasDisponibles = 30 // camas disponibles del HOTEL
-	var estrellas = 1 // cantidad de estrellas del HOTEL
-	var aireAcondicionado = false // si el VEHICULO tiene  aire acond.
-	var vtv = true // si el VEHICULO tiene la vtv
-	var spaDisponible = true // si el HOTEL tiene spa disponible
-	var esHotel = false
-	var esVehiculoParaTraslado = false
-	var esCombinado = false
-
-	method reservarSpa() {
-		spaDisponible = false
-	;
-	}
-
-	method configurarComoHotel(_estrellas, _camas, _spaDisponible) {
-		esHotel = true
-		esCombinado = false
-		esVehiculoParaTraslado = false
-		estrellas = _estrellas
-		camasDisponibles = _camas
-		spaDisponible = _spaDisponible
-	}
-
-	method configurarComoVehiculo(_tieneAire, _tieneVtv, _asientosDisponibles) {
-		esHotel = false
-		esCombinado = false
-		esVehiculoParaTraslado = true
-		aireAcondicionado = _tieneAire
-		vtv = _tieneVtv
-		asientosDisponibles = _asientosDisponibles
-	}
-
-	method configurarComoCombinado(_estrellas, _camas, _spaDisponible, _tieneAire, _tieneVtv, _asientosDisponibles) {
-		esHotel = false
-		esCombinado = true
-		esVehiculoParaTraslado = false
-		estrellas = _estrellas
-		camasDisponibles = _camas
-		spaDisponible = _spaDisponible
-		aireAcondicionado = _tieneAire
-		vtv = _tieneVtv
-		asientosDisponibles = _asientosDisponibles
-	}
-
-	method esHotel() {
-		return esHotel
+	var property estrellas = 1 // cantidad de estrellas del HOTEL
+	var property spaDisponible = true // si el HOTEL tiene spa disponible
+	
+	method sePuedeReservar(paquete) {
+		return self.camasDisponibles() >= paquete.cantidadPersonas() and 
+					(not paquete.premium() or (self.estrellas() >= 4 and self.spaDisponible())) 
 	}
 	
-	method esCombinado() {
-		return esCombinado
+	method reservar(paquete) {
+		self.camasDisponibles(self.camasDisponibles() - paquete.cantidadPersonas())
+		if (paquete.premium()) {
+			self.reservarSpa()
+		}
 	}
-
-	method esVehiculoParaTralado() {
-		return esVehiculoParaTraslado
+	
+	method reservarSpa() {
+		spaDisponible = false
 	}
+	
+}
 
-	method estrellas() {
-		return estrellas
+object vehiculo {
+
+	var property aireAcondicionado = false // si el VEHICULO tiene  aire acond.
+	var property vtv = true // si el VEHICULO tiene la vtv
+	var property asientosDisponibles = 10 // lugares disponibles del VEHICULO
+	
+	method sePuedeReservar(paquete) {
+		// Un traslado se puede reservar si el vehiculo cuenta con 
+		// lugares disponibles y tiene la verificacion tecnica al dia.
+		// Si el paquete es premium, tambien tiene que cumplir que  
+		// tenga aire Acondicionado
+		return self.asientosDisponibles() >= paquete.cantidadPersonas() and self.vtv() 
+											and (not paquete.premium() or self.aireAcondicionado())
 	}
-
-	method tieneAireAcondicionado() {
-		return aireAcondicionado
+	
+	method reservar(paquete) {
+		self.asientosDisponibles(self.asientosDisponibles() - paquete.cantidadPersonas())
 	}
+}
 
-	method tieneVTV() {
-		return vtv
+object servicioCombinado {
+
+	
+	var property hotelEstadia = hotel
+	var property vehiculoTraslado = vehiculo
+	
+	
+	method sePuedeReservar(paquete) {
+		return hotelEstadia.sePuedeReservar(paquete) and vehiculoTraslado.sePuedeReservar(paquete)
 	}
-
-	method spaDisponible() {
-		return spaDisponible
+	
+	method reservar(paquete) {
+		hotelEstadia.reservar(paquete)
+		vehiculoTraslado.reservar(paquete)					
 	}
 
 }

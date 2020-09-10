@@ -32,14 +32,13 @@ object virtuoso {
 	method instrumentoViejo(){
 		return instrumento.usos() >= 20
 	}
-	
 }
 
 object principiante {
 	var property instrumento = guitarraElectrica
 	
 	method suenaLindo () {
-		 return !instrumento.gastado()
+		 return not instrumento.gastado()
 	}
 
 	method tocar() {
@@ -57,7 +56,7 @@ object guitarraElectrica {
 	var property usos = 1
 	
 	method usar() {
-		usos++
+		usos++ 	
 		if(usos < 20) {
 			equipo.usar()
 		}

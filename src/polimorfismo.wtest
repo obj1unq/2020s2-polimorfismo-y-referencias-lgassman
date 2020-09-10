@@ -1,18 +1,27 @@
 import polimorfismo.*
 test "hotel comun reserva ok" {
 	 
-	servicio.configurarComoHotel(2, 50, false)
+	hotel.estrellas(2)
+	hotel.camasDisponibles(50)
+	hotel.spaDisponible(false)
+	paquete.servicioOfrecido(hotel)
+	
 	paquete.premium(false);
 	paquete.cantidadPersonas(10)
 	
 	assert.that(paquete.sePuedeReservar())
 	paquete.reservar()
 	assert.that(paquete.estaReservado())
-	assert.equals(40, servicio.camasDisponibles())
+	assert.equals(40, hotel.camasDisponibles())
 }
 test "hotel comun no se puede reservar" {
 	 
-	servicio.configurarComoHotel(2, 5, false)
+	
+	hotel.estrellas(2)
+	hotel.camasDisponibles(5)
+	hotel.spaDisponible(false)
+	
+	paquete.servicioOfrecido(hotel)
 	paquete.premium(false);
 	paquete.cantidadPersonas(10)
 	
@@ -21,19 +30,30 @@ test "hotel comun no se puede reservar" {
 
 test "hotel premium reserva ok" {
 	 
-	servicio.configurarComoHotel(5, 50, true)
+	hotel.estrellas(5)
+	hotel.camasDisponibles(50)
+	hotel.spaDisponible(true)
+
+	paquete.servicioOfrecido(hotel)
 	paquete.premium(true);
 	paquete.cantidadPersonas(10)
 	
 	assert.that(paquete.sePuedeReservar())
 	paquete.reservar()
 	assert.that(paquete.estaReservado())
-	assert.equals(40, servicio.camasDisponibles())
-	assert.notThat(servicio.spaDisponible())
+	assert.equals(40, hotel.camasDisponibles())
+	assert.notThat(hotel.spaDisponible())
 }
+
 test "hotel premium reserva no ok" {
 	 
-	servicio.configurarComoHotel(5, 50, false)
+	
+	hotel.estrellas(5)
+	hotel.camasDisponibles(50)
+	hotel.spaDisponible(false)
+	
+	paquete.servicioOfrecido(hotel)
+	
 	paquete.premium(true);
 	paquete.cantidadPersonas(10)
 	
@@ -42,21 +62,30 @@ test "hotel premium reserva no ok" {
 
 test "vehiculo comun reserva ok" {
 	 
-	 
-	servicio.configurarComoVehiculo(false, true, 15)  
+	 	
+	vehiculo.aireAcondicionado(false)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(15)
+	
+	paquete.servicioOfrecido(vehiculo)  
 	paquete.premium(false);
 	paquete.cantidadPersonas(10)
 	
 	assert.that(paquete.sePuedeReservar())
 	paquete.reservar()
 	assert.that(paquete.estaReservado())
-	assert.equals(5, servicio.asientosDisponibles())
+	assert.equals(5, vehiculo.asientosDisponibles())
 }
 
 test "vehiculo comun reserva no ok" {
 	 
 	 
-	servicio.configurarComoVehiculo(false, true, 8)  
+	
+	vehiculo.aireAcondicionado(false)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(8)
+	
+	paquete.servicioOfrecido(vehiculo)  
 	paquete.premium(false);
 	paquete.cantidadPersonas(10)
 	
@@ -66,19 +95,28 @@ test "vehiculo comun reserva no ok" {
 test "vehiculo premium reserva ok" {
 	 
 	 
-	servicio.configurarComoVehiculo(true, true, 15)  
+	vehiculo.aireAcondicionado(true)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(15)
+	
+	paquete.servicioOfrecido(vehiculo)
 	paquete.premium(true);
 	paquete.cantidadPersonas(10)
 	
 	assert.that(paquete.sePuedeReservar())
 	paquete.reservar()
 	assert.that(paquete.estaReservado())
-	assert.equals(5, servicio.asientosDisponibles())
+	assert.equals(5, vehiculo.asientosDisponibles())
 }
 
 test "vehiculo premium reserva no ok" {
 	 	 
-	servicio.configurarComoVehiculo(false, true, 15)  
+	vehiculo.aireAcondicionado(false)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(15)
+
+
+	paquete.servicioOfrecido(vehiculo)  
 	paquete.premium(true);
 	paquete.cantidadPersonas(10)
 	
@@ -89,23 +127,35 @@ test "vehiculo premium reserva no ok" {
 test "combinado comun reserva ok" {
 	 
 	 
-	 //(_estrellas, _camas, _spaDisponible, _tieneAire, _tieneVtv, _asientosDisponibles) {
-	servicio.configurarComoCombinado(2, 50, false, false, true, 15)  	
+	hotel.estrellas(2)
+	hotel.camasDisponibles(50)
+	hotel.spaDisponible(false)
+	
+	vehiculo.aireAcondicionado(false)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(15)
+	
+	  	
 	paquete.premium(false);
 	paquete.cantidadPersonas(10)
 	
 	assert.that(paquete.sePuedeReservar())
 	paquete.reservar()
 	assert.that(paquete.estaReservado())
-	assert.equals(5, servicio.asientosDisponibles())
-	assert.equals(40, servicio.camasDisponibles())
+	assert.equals(5, vehiculo.asientosDisponibles())
+	assert.equals(40, hotel.camasDisponibles())
 	
 }
 
 test "combinado comun reserva no ok" {
 	 
-	 //(_estrellas, _camas, _spaDisponible, _tieneAire, _tieneVtv, _asientosDisponibles) {
-	servicio.configurarComoCombinado(2, 50, false, false, true, 15)  
+	hotel.estrellas(2)
+	hotel.camasDisponibles(50)
+	hotel.spaDisponible(false)
+	
+	vehiculo.aireAcondicionado(false)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(15)
 	
 	paquete.premium(false);
 	paquete.cantidadPersonas(20)
@@ -115,8 +165,15 @@ test "combinado comun reserva no ok" {
 
 test "combinado premium reserva ok" {
 	 	 
-	 //(_estrellas, _camas, _spaDisponible, _tieneAire, _tieneVtv, _asientosDisponibles) {
-	servicio.configurarComoCombinado(5, 50, true, true, true, 15)  	
+	hotel.estrellas(5)
+	hotel.camasDisponibles(50)
+	hotel.spaDisponible(true)
+	
+	vehiculo.aireAcondicionado(true)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(15)
+	
+
 	paquete.premium(true);
 	paquete.cantidadPersonas(10)
 	
@@ -124,16 +181,21 @@ test "combinado premium reserva ok" {
 	
 	paquete.reservar()
 	assert.that(paquete.estaReservado())
-	assert.equals(5, servicio.asientosDisponibles())
-	assert.equals(40, servicio.camasDisponibles())
-	assert.notThat(servicio.spaDisponible())
+	assert.equals(5, vehiculo.asientosDisponibles())
+	assert.equals(40, hotel.camasDisponibles())
+	assert.notThat(hotel.spaDisponible())
 	
 }
 
 test "combinado premium reserva no ok" {
 	 
-	 //(_estrellas, _camas, _spaDisponible, _tieneAire, _tieneVtv, _asientosDisponibles) {
-	servicio.configurarComoCombinado(5, 50, true, false, true, 15)  	
+	hotel.estrellas(5)
+	hotel.camasDisponibles(50)
+	hotel.spaDisponible(true)
+	
+	vehiculo.aireAcondicionado(false)
+	vehiculo.vtv(true)
+	vehiculo.asientosDisponibles(15)
 	
 	paquete.premium(true);
 	paquete.cantidadPersonas(10)
